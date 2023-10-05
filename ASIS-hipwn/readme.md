@@ -1,8 +1,8 @@
 # hipwn
 ## ASIS
-The ASIS ctf is a hard CTF, rating 89,8 on CTF time, it is among the top weighted CTFs right now.
+The ASIS ctf is a hard CTF, rating 89,8 on CTF-time, it is among the top weighted CTFs right now.
 
-##Initial inspection
+## Initial inspection
 We are handed out a Dockerfile and a folder with the vulnerable binary.
 
 A `checksec` of the provided binary shows full protection. Which means, that we most likely are looking at a ROP challenge.

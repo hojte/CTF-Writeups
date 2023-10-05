@@ -1,0 +1,20 @@
+# Connect to the QEMU GDB server (assuming default port 1234)
+target remote localhost:1234
+
+# Set a breakpoint at the end of decryption function
+b *0x7c00 + 0xEC
+
+# Define a command to print the flag content when the breakpoint is hit
+define print_flag
+    # Assuming the flag is at most 16 characters (as per the provided assembly)
+    x/s 0x7DAD
+    continue
+end
+
+# Set the command to automatically execute each time the breakpoint is hit
+commands
+    print_flag
+end
+
+# Start the game execution
+continue
