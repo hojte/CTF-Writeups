@@ -1,15 +1,19 @@
 # T-dc-RON
 ## TDCNET CTF
-The TDCNET CTF was a medium level CTF. Not on CTF-time because physical participation was a part of the rules. A few people from Cyberlandsholdet was also present at the event, which was nicely hosted at TDC at their headquarters in Copenhagen.
+The TDCNET CTF was a medium level CTF. Not on CTF-time because physical participation was a part of the rules. 
+A few players from the danish national team 'Cyberlandsholdet' was also present at the event, which was nicely hosted at TDC at their headquarters in Copenhagen.
 
 ## Initial inspection
 We are handed over a `game` binary and a `run.sh`, specifying that we have to run it like so:
 
 `qemu-system-i386 -fda gameOriginal.bin`
 
-Running requires the QEMU emulator and also a linux UI version, as the game needs graphics to render. Starting the game and just letting it run will cause the game to end in a losing state when the snake hits a wall:
+Running requires the QEMU emulator and also a linux UI version, as the game needs graphics to render. 
+Starting the game and just letting it run will cause the game to end in a losing state when the snake hits a wall:
 ![](snake_loss.png)
-So it is a snake game. However, the points are tiny, making it hard to hit them, and the snake only 'stretches' - it does not move! So it is safe to say that it will be impossible to win the game in this state. 
+
+So it is a snake game. However, the points are tiny, making it hard to hit them, and the snake only 'stretches' - it does not move! 
+So it is safe to say that it will be impossible to win the game in this state. 
 
 ## Inspection
 Time to take a look at the disassembly. I am saying disassembly because it is a 16-bit game which IDA cannot decompile into c pseudocode:
@@ -84,9 +88,10 @@ seg000:00E6                 mov     [si], ch        ; update the flag with the d
 seg000:00E8                 inc     byte ptr ds:7D98h
 seg000:00EC                 retn
 ```
-The comments are for annotating the 'global variables' which are references to parts in memory can be xref'ed by IDA allowing us to see where they are used. 
+The comments are for annotating the 'global variables' which are references to parts in memory that can be xref'ed by IDA, allowing us to see where they are used. 
 From checking the variables it looks like it is the x-value of the snake head which is used to generate the key for xor'ing one byte in the flag.
-The binary seems to do decryption in rounds of 16 which means the flag will be 16 characters long. However, we do not know how many rounds the flag has to be decrypted (even though the game suggests 420).
+The binary seems to do decryption in rounds of 16 which means the flag will be 16 characters long. 
+However, we do not know how many rounds the flag has to be decrypted (even though the game suggests 420).
 
 ## Patching & Debugging
 For a clearer understanding, we will have to debug the binary. Luckily QEMU supports gdb, and with the flags `-s` and `-S` QEMU will launch the game in a paused state and start a debugging server, which gdb can connect to:
